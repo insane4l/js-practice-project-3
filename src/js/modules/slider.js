@@ -23,10 +23,22 @@ export default class Slider {
             slide.style.display = 'none';
         });
 
-        const currentSlide = this.slides[this.slideIndex - 1];
-        currentSlide.classList.remove('fadeOut');
-        currentSlide.classList.add('fadeIn');
-        currentSlide.style.display = 'block';
+        this.currentSlide = this.slides[this.slideIndex - 1];
+        this.currentSlide.classList.remove('fadeOut');
+        this.currentSlide.classList.add('fadeIn');
+        this.currentSlide.style.display = 'block';
+
+        try {
+            if(n === 3) {
+                setTimeout( () => {
+                    this.hanson.style.opacity = '1';
+                    this.hanson.classList.add('slideInUp');
+                }, 3000)
+            } else {
+                this.hanson.style.opacity = '0';
+                this.hanson.classList.remove('slideInUp');
+            }
+        } catch(e) {}
     }
 
     plussSlide(n) {
@@ -34,6 +46,12 @@ export default class Slider {
     }
 
     render() {
+        try {
+            this.hanson = document.querySelector('.hanson');
+            this.hanson.style.opacity = '0';
+            this.hanson.classList.add('animated');
+        } catch(e){}
+
         if (this.resetBtns.length > 0) {
             this.resetBtns.forEach( btn => {
                 btn.addEventListener('click', (e) => {

@@ -977,6 +977,8 @@ function () {
   _createClass(Slider, [{
     key: "showSlide",
     value: function showSlide(n) {
+      var _this = this;
+
       if (n > this.slides.length) {
         this.slideIndex = 1;
       }
@@ -990,10 +992,23 @@ function () {
         slide.classList.add('animated', 'fadeOut');
         slide.style.display = 'none';
       });
-      var currentSlide = this.slides[this.slideIndex - 1];
-      currentSlide.classList.remove('fadeOut');
-      currentSlide.classList.add('fadeIn');
-      currentSlide.style.display = 'block';
+      this.currentSlide = this.slides[this.slideIndex - 1];
+      this.currentSlide.classList.remove('fadeOut');
+      this.currentSlide.classList.add('fadeIn');
+      this.currentSlide.style.display = 'block';
+
+      try {
+        if (n === 3) {
+          setTimeout(function () {
+            _this.hanson.style.opacity = '1';
+
+            _this.hanson.classList.add('slideInUp');
+          }, 3000);
+        } else {
+          this.hanson.style.opacity = '0';
+          this.hanson.classList.remove('slideInUp');
+        }
+      } catch (e) {}
     }
   }, {
     key: "plussSlide",
@@ -1003,22 +1018,28 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
+
+      try {
+        this.hanson = document.querySelector('.hanson');
+        this.hanson.style.opacity = '0';
+        this.hanson.classList.add('animated');
+      } catch (e) {}
 
       if (this.resetBtns.length > 0) {
         this.resetBtns.forEach(function (btn) {
           btn.addEventListener('click', function (e) {
             e.preventDefault();
-            _this.slideIndex = 1;
+            _this2.slideIndex = 1;
 
-            _this.showSlide(_this.slideIndex);
+            _this2.showSlide(_this2.slideIndex);
           });
         });
       }
 
       this.btns.forEach(function (btn) {
         btn.addEventListener('click', function () {
-          return _this.plussSlide(1);
+          return _this2.plussSlide(1);
         });
       });
       this.showSlide(this.slideIndex);
