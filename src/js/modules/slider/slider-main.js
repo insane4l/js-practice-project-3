@@ -1,11 +1,8 @@
-export default class Slider {
-    constructor(sliderSelector, arrowsSelector, resetSelector) {
-        this.wrapper = document.querySelector(sliderSelector);
-        this.slides = this.wrapper.children;
-        this.btns = document.querySelectorAll(arrowsSelector);
-        this.resetBtns = document.querySelectorAll(resetSelector);
+import Slider from "./slider"
 
-        this.slideIndex = 1;
+export default class MainSlider extends Slider {
+    constructor(container, nextBtns, resetBtns) {
+        super(container, nextBtns, resetBtns);
     }
 
     showSlide(n) {
@@ -52,20 +49,19 @@ export default class Slider {
             this.hanson.classList.add('animated');
         } catch(e){}
 
-        if (this.resetBtns.length > 0) {
-            this.resetBtns.forEach( btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.slideIndex = 1;
-                    this.showSlide(this.slideIndex);
-                });
+        this.resetBtns.forEach( btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.slideIndex = 1;
+                this.showSlide(this.slideIndex);
             });
-        }
-
-        this.btns.forEach(btn => {
-            btn.addEventListener('click', () => this.plussSlide(1))
         });
 
+
+        this.nextBtns.forEach(btn => {
+            btn.addEventListener('click', () => this.plussSlide(1));
+        });
+        
         this.showSlide(this.slideIndex);
     }
 }
