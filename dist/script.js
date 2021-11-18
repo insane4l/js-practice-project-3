@@ -3041,22 +3041,24 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_playVideo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/playVideo */ "./src/js/modules/playVideo.js");
-/* harmony import */ var _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider/slider-main */ "./src/js/modules/slider/slider-main.js");
-/* harmony import */ var _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/slider/slider-secondary */ "./src/js/modules/slider/slider-secondary.js");
+/* harmony import */ var _modules_difference_lists__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/difference-lists */ "./src/js/modules/difference-lists.js");
+/* harmony import */ var _modules_play_video__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/play-video */ "./src/js/modules/play-video.js");
+/* harmony import */ var _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/slider/slider-main */ "./src/js/modules/slider/slider-main.js");
+/* harmony import */ var _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/slider/slider-secondary */ "./src/js/modules/slider/slider-secondary.js");
+
 
 
 
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  var mainSlider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  var mainSlider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_2__["default"]({
     container: '.page',
     nextBtns: '.sidecontrol__controls .next',
     resetBtns: '.main-logo'
   });
   mainSlider.render();
-  var showUpSlider = new _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_2__["default"]({
+  var showUpSlider = new _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_3__["default"]({
     container: '.showup__content-slider',
     prevBtns: '.showup__prev',
     nextBtns: '.showup__next',
@@ -3064,7 +3066,7 @@ window.addEventListener('DOMContentLoaded', function () {
     animate: true
   });
   showUpSlider.init();
-  var modulesSlider = new _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_2__["default"]({
+  var modulesSlider = new _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_3__["default"]({
     container: '.modules__content-slider',
     prevBtns: '.modules__info-btns .slick-prev',
     nextBtns: '.modules__info-btns .slick-next',
@@ -3072,23 +3074,103 @@ window.addEventListener('DOMContentLoaded', function () {
     autoplay: true
   });
   modulesSlider.init();
-  var feedSlider = new _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_2__["default"]({
+  var feedSlider = new _modules_slider_slider_secondary__WEBPACK_IMPORTED_MODULE_3__["default"]({
     container: '.feed__slider',
     prevBtns: '.feed__slider .slick-prev',
     nextBtns: '.feed__slider .slick-next',
     activeClass: 'feed__item-active'
   });
   feedSlider.init();
-  var player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_0__["default"]('.showup .play', '.overlay');
+  var player = new _modules_play_video__WEBPACK_IMPORTED_MODULE_1__["default"]('.showup .play', '.overlay');
   player.init();
+  new _modules_difference_lists__WEBPACK_IMPORTED_MODULE_0__["default"]('.officerold', '.officernew', '.officer__card-item').init();
 });
 
 /***/ }),
 
-/***/ "./src/js/modules/playVideo.js":
-/*!*************************************!*\
-  !*** ./src/js/modules/playVideo.js ***!
-  \*************************************/
+/***/ "./src/js/modules/difference-lists.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/difference-lists.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DifferenceLists; });
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var DifferenceLists =
+/*#__PURE__*/
+function () {
+  function DifferenceLists(firstList, secondList, itemSelector) {
+    _classCallCheck(this, DifferenceLists);
+
+    this.firstList = document.querySelector(firstList);
+    this.secondList = document.querySelector(secondList);
+    this.itemSelector = itemSelector;
+    this.firstCounter = 0;
+    this.secondCounter = 0;
+  }
+
+  _createClass(DifferenceLists, [{
+    key: "hideCards",
+    value: function hideCards(list) {
+      var items = list.querySelectorAll(this.itemSelector);
+      items.forEach(function (el) {
+        if (el !== items[items.length - 1]) {
+          el.style.display = 'none';
+          el.classList.add('animated', 'fadeInDown');
+        }
+      });
+    }
+  }, {
+    key: "bindTriggers",
+    value: function bindTriggers(list, counter) {
+      var items = list.querySelectorAll(this.itemSelector),
+          button = items[items.length - 1];
+      button.addEventListener('click', function () {
+        if (counter < items.length - 2) {
+          items[counter].style.display = 'flex';
+          counter++;
+        } else {
+          items[counter].style.display = 'flex';
+          button.classList.add('animated', 'fadeOut');
+          setTimeout(function () {
+            button.remove();
+          }, 1000);
+        }
+      });
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      this.hideCards(this.firstList);
+      this.hideCards(this.secondList);
+      this.bindTriggers(this.firstList, this.firstCounter);
+      this.bindTriggers(this.secondList, this.secondCounter);
+    }
+  }]);
+
+  return DifferenceLists;
+}();
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/play-video.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/play-video.js ***!
+  \**************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

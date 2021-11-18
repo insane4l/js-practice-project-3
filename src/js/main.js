@@ -1,4 +1,5 @@
-import VideoPlayer from "./modules/playVideo";
+import DifferenceLists from "./modules/difference-lists";
+import VideoPlayer from "./modules/play-video";
 import MainSlider from "./modules/slider/slider-main";
 import SecondarySlider from "./modules/slider/slider-secondary";
 
@@ -45,5 +46,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const player = new VideoPlayer('.showup .play', '.overlay');
     player.init();
+
+
+    new DifferenceLists('.officerold', '.officernew', '.officer__card-item').init();
     
 });
