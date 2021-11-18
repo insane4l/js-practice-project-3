@@ -1,4 +1,5 @@
 import DifferenceLists from "./modules/difference-lists";
+import SubmittingForms from "./modules/forms";
 import VideoPlayer from "./modules/play-video";
 import MainSlider from "./modules/slider/slider-main";
 import SecondarySlider from "./modules/slider/slider-secondary";
@@ -14,7 +15,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     mainSlider.render();
 
-
     const showUpSlider = new SecondarySlider({
         container: '.showup__content-slider', 
         prevBtns: '.showup__prev', 
@@ -23,7 +23,6 @@ window.addEventListener('DOMContentLoaded', () => {
         animate: true
     });
     showUpSlider.init();
-
 
     const modulesSlider = new SecondarySlider({
         container: '.modules__content-slider', 
@@ -34,7 +33,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     modulesSlider.init();
 
-
     const feedSlider = new SecondarySlider({
         container: '.feed__slider', 
         prevBtns: '.feed__slider .slick-prev', 
@@ -43,11 +41,11 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     feedSlider.init();
 
-
     const player = new VideoPlayer('.showup .play', '.overlay');
     player.init();
 
-
     new DifferenceLists('.officerold', '.officernew', '.officer__card-item').init();
+
+    new SubmittingForms('.form', 'assets/question.php').init();
     
 });
