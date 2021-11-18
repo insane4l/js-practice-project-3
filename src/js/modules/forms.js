@@ -6,7 +6,7 @@ export default class SubmittingForms {
             success: 'Спасибо! Мы свяжемся с вами в ближайшее время',
             failure: 'Произошла ошибка. Пожалуйста перезагрузите страницу и попробуйте заново'
         };
-        this.path = url;
+        this.url = url;
     }
 
     checkMailInputs() {
@@ -17,8 +17,8 @@ export default class SubmittingForms {
                 if(e.key.match(/[^a-z 0-9 @ \.]/ig)) {
                     e.preventDefault();
                 }
-            })
-        })
+            });
+        });
     }
 
     initPhoneMask() {
@@ -67,7 +67,7 @@ export default class SubmittingForms {
             input.addEventListener('focus', createMask);
             input.addEventListener('input', createMask);
             input.addEventListener('blur', createMask);
-        })
+        });
     }
 
     bindSubmittingForms() {
@@ -83,7 +83,7 @@ export default class SubmittingForms {
             const messageBlock = this.createStatusMessage(form.parentNode, this.message.loading);
             const formData = new FormData(form);
             
-            this.postData(this.path, formData)
+            this.postData(this.url, formData)
                 .then( () => {
                     messageBlock.textContent = this.message.success;
                     this.clearInputs(form);
@@ -120,7 +120,7 @@ export default class SubmittingForms {
         font-size: 18px;
         text-align: center;
         color: grey;
-        `
+        `;
 
         container.appendChild(messageBlock);
 

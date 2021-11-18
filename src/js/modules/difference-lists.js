@@ -37,10 +37,12 @@ export default class DifferenceLists {
     }
 
     init() {
-        this.hideCards(this.firstList);
-        this.hideCards(this.secondList);
+        try {
+            this.hideCards(this.firstList);
+            this.hideCards(this.secondList);
 
-        this.bindTriggers(this.firstList, this.firstCounter);
-        this.bindTriggers(this.secondList, this.secondCounter);
+            this.bindTriggers(this.firstList, this.firstCounter);
+            this.bindTriggers(this.secondList, this.secondCounter);
+        } catch(e){}
     }
 }

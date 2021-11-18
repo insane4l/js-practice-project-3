@@ -42,13 +42,17 @@ export default class MainSlider extends Slider {
         this.showSlide(this.slideIndex += n)
     }
 
-    render() {
-        try {
-            this.hanson = document.querySelector('.hanson');
-            this.hanson.style.opacity = '0';
-            this.hanson.classList.add('animated');
-        } catch(e){}
+    bindArrows(btns, direction) {
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                this.plussSlide(direction);
+            });
+        });
+    }
 
+    bindTriggers() {
         this.resetBtns.forEach( btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -57,11 +61,32 @@ export default class MainSlider extends Slider {
             });
         });
 
+        // this.nextBtns.forEach(btn => {
+        //     btn.addEventListener('click', () => this.plussSlide(1));
+        // });
+        // this.nextBtns.forEach(btn => {
+        //     btn.addEventListener('click', () => this.plussSlide(1));
+        // });
+        this.bindArrows(this.prevBtns, -1);
+        this.bindArrows(this.nextBtns, +1);
 
-        this.nextBtns.forEach(btn => {
+        this.additionalBtns = document.querySelectorAll('.sidecontrol__controls .next');
+        this.additionalBtns.forEach(btn => {
             btn.addEventListener('click', () => this.plussSlide(1));
         });
-        
-        this.showSlide(this.slideIndex);
+
+    }
+
+    render() {
+        if (this.container) {
+            try {
+                this.hanson = document.querySelector('.hanson');
+                this.hanson.style.opacity = '0';
+                this.hanson.classList.add('animated');
+            } catch(e){}
+            
+            this.bindTriggers();
+            this.showSlide(this.slideIndex);
+        }
     }
 }

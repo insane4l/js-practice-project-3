@@ -41,6 +41,14 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     feedSlider.init();
 
+    const modulesPageMainSlider = new MainSlider({
+        container: '.moduleapp',
+        prevBtns: '.prevmodule',
+        nextBtns: '.nextmodule',
+        resetBtns: '.main-logo'
+    });
+    modulesPageMainSlider.render();
+
     const player = new VideoPlayer('.showup .play', '.overlay');
     player.init();
 

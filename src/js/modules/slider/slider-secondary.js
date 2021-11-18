@@ -70,19 +70,21 @@ export default class SecondarySlider extends Slider {
     }
 
     init() {
-        this.container.style.cssText = `
+        try {
+            this.container.style.cssText = `
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
             align-items: flex-start;
-        `;
+            `;
 
-        this.bindTriggers();
-        this.decorateActiveSlide(this.slides[0]);
-        this.checkOtherChildren('BUTTON');
+            this.bindTriggers();
+            this.decorateActiveSlide(this.slides[0]);
+            this.checkOtherChildren('BUTTON');
 
-        if (this.autoplay) {
-            setInterval(() => this.showNextSlide(), 3000);
-        }
+            if (this.autoplay) {
+                setInterval(() => this.showNextSlide(), 3000);
+            }
+        } catch(e){}
     }
 }
