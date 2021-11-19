@@ -28,8 +28,10 @@ export default class MainSlider extends Slider {
         try {
             if(n === 3) {
                 setTimeout( () => {
-                    this.hanson.style.opacity = '1';
-                    this.hanson.classList.add('slideInUp');
+                    try {
+                        this.hanson.style.opacity = '1';
+                        this.hanson.classList.add('slideInUp');
+                    } catch(e) {}
                 }, 3000)
             } else {
                 this.hanson.style.opacity = '0';

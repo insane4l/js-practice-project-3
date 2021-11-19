@@ -5694,9 +5694,11 @@ function (_Slider) {
       try {
         if (n === 3) {
           setTimeout(function () {
-            _this.hanson.style.opacity = '1';
+            try {
+              _this.hanson.style.opacity = '1';
 
-            _this.hanson.classList.add('slideInUp');
+              _this.hanson.classList.add('slideInUp');
+            } catch (e) {}
           }, 3000);
         } else {
           this.hanson.style.opacity = '0';
