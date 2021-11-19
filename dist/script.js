@@ -5230,7 +5230,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
   var mainSlider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_5__["default"]({
     container: '.page',
-    nextBtns: '.sidecontrol__controls .next',
     resetBtns: '.main-logo'
   });
   mainSlider.render();
@@ -5268,7 +5267,7 @@ window.addEventListener('DOMContentLoaded', function () {
   new _modules_play_video__WEBPACK_IMPORTED_MODULE_3__["default"]('.module__video-item .play', '.overlay').init();
   new _modules_difference_lists__WEBPACK_IMPORTED_MODULE_0__["default"]('.officerold', '.officernew', '.officer__card-item').init();
   new _modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"]('.form', 'assets/question.php').init();
-  new _modules_show_info__WEBPACK_IMPORTED_MODULE_4__["default"]('.plus__content').init();
+  new _modules_show_info__WEBPACK_IMPORTED_MODULE_4__["default"]('.module__info-show .plus').init();
   new _modules_download__WEBPACK_IMPORTED_MODULE_1__["default"]('.module__info .download').init();
 });
 
@@ -5812,6 +5811,7 @@ function () {
       this.btns.forEach(function (btn) {
         btn.addEventListener('click', function () {
           var nextEl = btn.closest('.module__info-show').nextElementSibling;
+          nextEl.classList.toggle('msg');
           nextEl.style.marginTop = '20px';
         });
       });

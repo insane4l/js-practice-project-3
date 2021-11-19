@@ -4,11 +4,12 @@ export default class ShowInfo {
     }
 
     init() {
+
         this.btns.forEach( btn => {
             btn.addEventListener('click', () => {
                 const nextEl = btn.closest('.module__info-show').nextElementSibling;
 
-                    
+                nextEl.classList.toggle('msg');
                 nextEl.style.marginTop = '20px';
             });
         });

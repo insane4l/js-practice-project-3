@@ -12,7 +12,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const mainSlider = new MainSlider({
         container: '.page',
-        nextBtns: '.sidecontrol__controls .next',
         resetBtns: '.main-logo'
     });
     mainSlider.render();
@@ -58,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     new SubmittingForms('.form', 'assets/question.php').init();
     
-    new ShowInfo('.plus__content').init();
+    new ShowInfo('.module__info-show .plus').init();
 
     new Download('.module__info .download').init();
 });
