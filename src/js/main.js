@@ -1,6 +1,8 @@
 import DifferenceLists from "./modules/difference-lists";
+import Download from "./modules/download";
 import SubmittingForms from "./modules/forms";
 import VideoPlayer from "./modules/play-video";
+import ShowInfo from "./modules/show-info";
 import MainSlider from "./modules/slider/slider-main";
 import SecondarySlider from "./modules/slider/slider-secondary";
 
@@ -56,4 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     new SubmittingForms('.form', 'assets/question.php').init();
     
+    new ShowInfo('.plus__content').init();
+
+    new Download('.module__info .download').init();
 });

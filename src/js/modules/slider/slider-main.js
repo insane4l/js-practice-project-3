@@ -74,7 +74,10 @@ export default class MainSlider extends Slider {
 
         this.additionalBtns = document.querySelectorAll('.sidecontrol__controls .next');
         this.additionalBtns.forEach(btn => {
-            btn.addEventListener('click', () => this.plussSlide(1));
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.plussSlide(1);
+            });
         });
 
     }
