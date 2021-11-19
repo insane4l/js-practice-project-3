@@ -396,6 +396,36 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/array-method-has-species-support.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/core-js/internals/array-method-has-species-support.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+var V8_VERSION = __webpack_require__(/*! ../internals/v8-version */ "./node_modules/core-js/internals/v8-version.js");
+
+var SPECIES = wellKnownSymbol('species');
+
+module.exports = function (METHOD_NAME) {
+  // We can't use this feature detection in V8 since it causes
+  // deoptimization and serious performance degradation
+  // https://github.com/zloirock/core-js/issues/677
+  return V8_VERSION >= 51 || !fails(function () {
+    var array = [];
+    var constructor = array.constructor = {};
+    constructor[SPECIES] = function () {
+      return { foo: 1 };
+    };
+    return array[METHOD_NAME](Boolean).foo !== 1;
+  });
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/array-species-create.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/internals/array-species-create.js ***!
@@ -3055,6 +3085,38 @@ exports.f = wellKnownSymbol;
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.array.filter.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.filter.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var $filter = __webpack_require__(/*! ../internals/array-iteration */ "./node_modules/core-js/internals/array-iteration.js").filter;
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+
+var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('filter');
+// Edge 14- issue
+var USES_TO_LENGTH = HAS_SPECIES_SUPPORT && !fails(function () {
+  [].filter.call({ length: -1, 0: 1 }, function (it) { throw it; });
+});
+
+// `Array.prototype.filter` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.filter
+// with adding support of @@species
+$({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGTH }, {
+  filter: function filter(callbackfn /* , thisArg */) {
+    return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.array.from.js":
 /*!*******************************************************!*\
   !*** ./node_modules/core-js/modules/es.array.from.js ***!
@@ -5198,8 +5260,8 @@ window.addEventListener('DOMContentLoaded', function () {
     resetBtns: '.main-logo'
   });
   modulesPageMainSlider.render();
-  var player = new _modules_play_video__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
-  player.init();
+  new _modules_play_video__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay').init();
+  new _modules_play_video__WEBPACK_IMPORTED_MODULE_2__["default"]('.module__video-item .play', '.overlay').init();
   new _modules_difference_lists__WEBPACK_IMPORTED_MODULE_0__["default"]('.officerold', '.officernew', '.officer__card-item').init();
   new _modules_forms__WEBPACK_IMPORTED_MODULE_1__["default"]('.form', 'assets/question.php').init();
 });
@@ -5521,8 +5583,11 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return VideoPlayer; });
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_filter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.filter */ "./node_modules/core-js/modules/es.array.filter.js");
+/* harmony import */ var core_js_modules_es_array_filter__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5540,6 +5605,7 @@ function () {
     this.btns = document.querySelectorAll(triggerSelector);
     this.overlay = document.querySelector(overlaySelector);
     this.close = this.overlay.querySelector('.close');
+    this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
   }
 
   _createClass(VideoPlayer, [{
@@ -5549,11 +5615,16 @@ function () {
 
       this.btns.forEach(function (btn) {
         btn.addEventListener('click', function () {
-          var path = btn.getAttribute('data-url');
+          var disabledBtn = btn.querySelector('.closed');
 
-          _this.createPlayer(path);
+          if (!disabledBtn) {
+            _this.activeBtn = btn;
+            var path = btn.getAttribute('data-url');
 
-          _this.overlay.style.display = 'flex';
+            _this.createPlayer(path);
+
+            _this.overlay.style.display = 'flex';
+          }
         });
       });
     }
@@ -5575,19 +5646,51 @@ function () {
         this.player = new YT.Player('frame', {
           height: '100%',
           width: '100%',
+          videoId: url,
+          events: {
+            'onStateChange': this.onPlayerStateChange
+          }
+        });
+      } else {
+        this.player.loadVideoById({
           videoId: url
         });
       }
     }
   }, {
+    key: "onPlayerStateChange",
+    value: function onPlayerStateChange(e) {
+      try {
+        if (e.data === 0) {
+          var nextVideoBlock = this.activeBtn.closest('.module__video-item').nextElementSibling;
+          var nextVideoBtn = nextVideoBlock.querySelector('.play__circle');
+          var nextVideoBtnImg = nextVideoBtn.querySelector('svg');
+          var nextVideoBtnText = nextVideoBlock.querySelector('.play__text');
+          var playImg = this.activeBtn.querySelector('svg').cloneNode(true);
+
+          if (nextVideoBtn.classList.contains('closed')) {
+            nextVideoBlock.style.opacity = '1';
+            nextVideoBlock.style.filter = 'none';
+            nextVideoBtn.classList.remove('closed');
+            nextVideoBtnImg.remove();
+            nextVideoBtn.appendChild(playImg);
+            nextVideoBtnText.textContent = 'play video';
+            nextVideoBtnText.classList.remove('attention');
+          }
+        }
+      } catch (e) {}
+    }
+  }, {
     key: "init",
     value: function init() {
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      this.bindTriggers();
-      this.bindCloseBtn();
+      if (this.btns.length > 0) {
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        this.bindTriggers();
+        this.bindCloseBtn();
+      }
     }
   }]);
 

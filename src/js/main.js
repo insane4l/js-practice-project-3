@@ -49,8 +49,8 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     modulesPageMainSlider.render();
 
-    const player = new VideoPlayer('.showup .play', '.overlay');
-    player.init();
+    new VideoPlayer('.showup .play', '.overlay').init();
+    new VideoPlayer('.module__video-item .play', '.overlay').init();
 
     new DifferenceLists('.officerold', '.officernew', '.officer__card-item').init();
 
